@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Расписание</title>
+
+<style>
+
+body{
+    font-family:Arial;
+    background:#f4f6f9;
+    margin:0;
+}
+
+header{
+    background:#1e3a8a;
+    color:white;
+    text-align:center;
+    padding:20px;
+}
+
+.container{
+    width:95%;
+    margin:auto;
+    margin-top:20px;
+}
+
+button{
+    padding:12px 20px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+</style>
+
+</head>
+<body>
+
+<header>
+<h1>⚡ Генерация расписания</h1>
+</header>
+
+<div class="container">
+
+<button onclick="generateSchedule()">
+Сгенерировать расписание
+</button>
+<button onclick="exportExcel()">
+    📥 Экспорт в Excel
+</button>
+
+<table>
+<thead>
+<tr>
+<th>Класс</th>
+<th>День</th>
+<th>Урок</th>
+<th>Предмет</th>
+<th>Учитель</th>
+<th>Кабинет</th>
+</tr>
+</thead>
+
+<tbody id="scheduleTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+let loads =
+JSON.parse(localStorage.getItem("loads")) || [];
+
+let schedule=[];
+
+function generateSchedule(){
+
+schedule=[];
+let teacherBusy = {};
+let roomBusy = {};
+let classBusy = {};
+let days=[
+"Понедельник",
+"Вторник",
+"Среда",
+"Четверг",
+"Пятница"
+];
+
+let lessons= [1,2,3,4,5,6,7];
+
+
+loads.forEach(load=>{
+
+    for(let h=0; h<load.hours; h++){
+
+        let placed = false;
+
+        for(let d=0; d<days.length && !placed; d++){
+
+            for(let l=0; l<lessons.length && !placed; l++){
+
+                let teacherKey =
+                    load.teacher + "_" + days[d] + "_" + lessons[l];
+
+                let roomKey =
+                    load.room + "_" + days[d] + "_" + lessons[l];
+
+                let classKey =
+                    load.className + "_" + days[d] + "_" + lessons[l];
+
+                if(
+                    !teacherBusy[teacherKey] &&
+                    !roomBusy[roomKey] &&
+                    !classBusy[classKey]
+                ){
+
+                    teacherBusy[teacherKey] = true;
+                    roomBusy[roomKey] = true;
+                    classBusy[classKey] = true;
+
+                    schedule.push({
+
+                        className: load.className,
+                        subject: load.subject,
+                        teacher: load.teacher,
+                        room: load.room,
+
+                        day: days[d],
+                        lesson: lessons[l]
+
+                    });
+
+                    placed = true;
+
+                }
+
+            }
+
+        }
+
+    }
+
+});
+
+
+renderSchedule();
+
+localStorage.setItem(
+    "schedule",
+    JSON.stringify(schedule)
+);
+}
+
+function renderSchedule(){
+
+let table=
+document.getElementById("scheduleTable");
+
+table.innerHTML="";
+
+schedule.forEach(item=>{
+
+table.innerHTML += `
+<tr>
+<td>${item.className}</td>
+<td>${item.day}</td>
+<td>${item.lesson}</td>
+<td>${item.subject}</td>
+<td>${item.teacher}</td>
+<td>${item.room}</td>
+</tr>
+`;
+
+});
+
+}
+function exportExcel(){
+
+    // создаем новую книгу Excel
+    let wb = XLSX.utils.book_new();
+
+    // преобразуем массив schedule в таблицу
+    let ws = XLSX.utils.json_to_sheet(
+
+        schedule.map(item => ({
+
+            "Класс": item.className,
+            "День": item.day,
+            "Урок": item.lesson,
+            "Предмет": item.subject,
+            "Учитель": item.teacher,
+            "Кабинет": item.room
+
+        }))
+
+    );
+
+    // добавляем лист
+    XLSX.utils.book_append_sheet(
+        wb,
+        ws,
+        "Расписание"
+    );
+
+    // сохраняем файл
+    XLSX.writeFile(
+        wb,
+        "Расписание.xlsx"
+    );
+
+}
+</script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+</body>
+</html>

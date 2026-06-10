@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Учителя</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    margin:0;
+}
+
+header{
+    background:#1e3a8a;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    width:90%;
+    margin:auto;
+    margin-top:30px;
+}
+
+input{
+    padding:10px;
+    width:300px;
+    font-size:16px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>👨‍🏫 Классы</h1>
+</header>
+
+<div class="container">
+
+<input
+ type="text"
+ id="className"
+ placeholder="Название класса">
+
+<button onclick="addClass()">
+Добавить
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>№</th>
+<th>ФИО</th>
+</tr>
+</thead>
+
+<tbody id="teacherTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+
+let classes =
+JSON.parse(localStorage.getItem("classes")) || [];
+
+function addClass(){
+
+    let name =
+    document.getElementById("className").value.trim();
+
+    if(name === "") return;
+
+    classes.push(name);
+
+    localStorage.setItem(
+        "classes",
+        JSON.stringify(classes)
+    );
+
+    renderTable();
+
+    document.getElementById("className").value="";
+}
+
+function renderTable(){
+
+    let table =
+    document.getElementById("teacherTable");
+
+    table.innerHTML="";
+
+    classes.forEach((teacher,index)=>{
+
+        table.innerHTML += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${teacher}</td>
+        </tr>
+        `;
+
+    });
+
+}
+
+renderTable();
+
+</script>
+
+</script>
+
+</body>
+</html>

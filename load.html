@@ -1,0 +1,152 @@
+<h1>📊 Нагрузка</h1>
+
+<select id="classSelect"></select>
+
+<select id="subjectSelect"></select>
+
+<select id="teacherSelect"></select>
+
+<select id="roomSelect"></select>
+
+<input
+type="number"
+id="hours"
+placeholder="Часов в неделю">
+
+<button onclick="addLoad()">
+Добавить
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>Класс</th>
+<th>Предмет</th>
+<th>Учитель</th>
+<th>Кабинет</th>
+<th>Часы</th>
+</tr>
+</thead>
+
+<tbody id="loadTable">
+</tbody>
+
+</table>
+
+<script>
+
+let loads =
+JSON.parse(localStorage.getItem("loads")) || [];
+
+let classes =
+JSON.parse(localStorage.getItem("classes")) || [];
+
+let subjects =
+JSON.parse(localStorage.getItem("subjects")) || [];
+
+let teachers =
+JSON.parse(localStorage.getItem("teachers")) || [];
+
+let rooms =
+JSON.parse(localStorage.getItem("rooms")) || [];
+
+
+function fillSelect(id,data){
+
+let select = document.getElementById(id);
+
+select.innerHTML="";
+
+data.forEach(item=>{
+
+select.innerHTML += `
+<option value="${item}">
+${item}
+</option>`;
+
+});
+
+}
+
+function init(){
+
+fillSelect("classSelect",classes);
+
+fillSelect(
+"subjectSelect",
+subjects
+);
+
+fillSelect(
+"teacherSelect",
+teachers
+);
+
+fillSelect(
+"roomSelect",
+rooms
+);
+
+renderTable();
+
+}
+
+init();
+
+function addLoad(){
+
+let load = {
+
+className:
+document.getElementById("classSelect").value,
+
+subject:
+document.getElementById("subjectSelect").value,
+
+teacher:
+document.getElementById("teacherSelect").value,
+
+room:
+document.getElementById("roomSelect").value,
+
+hours:
+document.getElementById("hours").value
+
+};
+
+loads.push(load);
+
+localStorage.setItem(
+"loads",
+JSON.stringify(loads)
+);
+
+renderTable();
+
+}
+
+function renderTable(){
+
+let table =
+document.getElementById("loadTable");
+
+table.innerHTML="";
+
+loads.forEach(load=>{
+
+table.innerHTML += `
+<tr>
+<td>${load.className}</td>
+<td>${load.subject}</td>
+<td>${load.teacher}</td>
+<td>${load.room}</td>
+<td>${load.hours}</td>
+</tr>
+`;
+
+});
+
+}
+
+</script>

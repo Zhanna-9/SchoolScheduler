@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Учителя</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    margin:0;
+}
+
+header{
+    background:#1e3a8a;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    width:90%;
+    margin:auto;
+    margin-top:30px;
+}
+
+input{
+    padding:10px;
+    width:300px;
+    font-size:16px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>👨‍🏫 Кабинеты</h1>
+</header>
+
+<div class="container">
+
+<input
+ type="text"
+ id="roomName"
+ placeholder="Номер кабинета">
+
+<button onclick="addRoom()">
+Добавить
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>№</th>
+<th>ФИО</th>
+</tr>
+</thead>
+
+<tbody id="teacherTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+
+let rooms =
+JSON.parse(localStorage.getItem("rooms")) || [];
+
+function addRoom(){
+
+    let name =
+    document.getElementById("roomName").value.trim();
+
+    if(name === "") return;
+
+    rooms.push(name);
+
+    localStorage.setItem(
+        "rooms",
+        JSON.stringify(rooms)
+    );
+
+    renderTable();
+
+    document.getElementById("roomName").value="";
+}
+
+function renderTable(){
+
+    let table =
+    document.getElementById("teacherTable");
+
+    table.innerHTML="";
+
+    rooms.forEach((teacher,index)=>{
+
+        table.innerHTML += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${teacher}</td>
+        </tr>
+        `;
+
+    });
+
+}
+
+renderTable();
+
+</script>
+
+</script>
+
+</body>
+</html>

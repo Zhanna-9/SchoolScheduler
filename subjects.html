@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Учителя</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    margin:0;
+}
+
+header{
+    background:#1e3a8a;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    width:90%;
+    margin:auto;
+    margin-top:30px;
+}
+
+input{
+    padding:10px;
+    width:300px;
+    font-size:16px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>👨‍🏫 Предметы</h1>
+</header>
+
+<div class="container">
+
+<input
+ type="text"
+ id="subjectName"
+ placeholder="Название предмета">
+
+<button onclick="addSubject()">
+Добавить
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>№</th>
+<th>ФИО</th>
+</tr>
+</thead>
+
+<tbody id="teacherTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+
+let subjects =
+JSON.parse(localStorage.getItem("subjects")) || [
+"Математика",
+"Алгебра",
+"Геометрия",
+"Информатика",
+"Физика",
+"Химия",
+"Биология",
+"История Казахстана",
+"Всемирная история",
+"География",
+"Қазақ тілі",
+"Қазақ әдебиеті",
+"Русский язык",
+"Русская литература",
+"Английский язык",
+"Немецкий язык",
+"Французский язык",
+"Самопознание",
+"Музыка",
+"Изобразительное искусство",
+"Технология",
+"Физическая культура",
+"Начальная военная подготовка",
+"Основы права",
+"Экономика",
+"Казак тілі және әдебиет",
+"Естествознание"
+];
+
+localStorage.setItem(
+"subjects",
+JSON.stringify(subjects)
+);
+
+function addSubject(){
+
+    let name =
+    document.getElementById("subjectName").value.trim();
+
+    if(name === "") return;
+
+    subjects.push(name);
+
+    localStorage.setItem(
+        "subjects",
+        JSON.stringify(subjects)
+    );
+
+    renderTable();
+
+    document.getElementById("subjectName").value="";
+}
+
+function renderTable(){
+
+    let table =
+    document.getElementById("teacherTable");
+
+    table.innerHTML="";
+
+    subjects.forEach((teacher,index)=>{
+
+        table.innerHTML += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${teacher}</td>
+        </tr>
+        `;
+
+    });
+
+}
+
+renderTable();
+
+</script>
+
+</script>
+
+</body>
+</html>

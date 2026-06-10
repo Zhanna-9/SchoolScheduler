@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Учителя</title>
+
+<style>
+
+body{
+    font-family:Arial,sans-serif;
+    background:#f4f6f9;
+    margin:0;
+}
+
+header{
+    background:#1e3a8a;
+    color:white;
+    padding:20px;
+    text-align:center;
+}
+
+.container{
+    width:90%;
+    margin:auto;
+    margin-top:30px;
+}
+
+input{
+    padding:10px;
+    width:300px;
+    font-size:16px;
+}
+
+button{
+    padding:10px 20px;
+    font-size:16px;
+    cursor:pointer;
+}
+
+table{
+    width:100%;
+    margin-top:20px;
+    border-collapse:collapse;
+    background:white;
+}
+
+th,td{
+    border:1px solid #ddd;
+    padding:10px;
+}
+
+th{
+    background:#1e3a8a;
+    color:white;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+<h1>👨‍🏫 Учителя</h1>
+</header>
+
+<div class="container">
+
+<input
+ type="text"
+ id="teacherName"
+ placeholder="ФИО учителя">
+
+<button onclick="addTeacher()">
+Добавить
+</button>
+
+<table>
+
+<thead>
+<tr>
+<th>№</th>
+<th>ФИО</th>
+</tr>
+</thead>
+
+<tbody id="teacherTable">
+</tbody>
+
+</table>
+
+</div>
+
+<script>
+
+
+let teachers = JSON.parse(localStorage.getItem("teachers")) || [
+"Абилдаева Ирина Станиславовна",
+"Аденов Қанат Аширалиевич",
+"Айбас Жалғас Русланұлы",
+"Алпысбекова Гүлнұр Алпысбекқызы",
+"Аракелян Сатеник Константиновна",
+"Аренов Ербол Бейсембаевич",
+"Артамышева Ирина Таукебаевна",
+"Асаинова Айгерим Кайратовна",
+"Асанова Ляззат Куанышевна",
+"Асанова Назира Куанышовна",
+"Асылбекова Жанаргуль Шабанбаевна",
+"Ахметова Аигуль Кабидоллавна",
+"Аширова Гүльдана Дүйсенқызы",
+"Әсен Камила Ерболатовна",
+"Байкенже Сағыныш Кенелдікқызы",
+"Байтасова Марал Шормановна",
+"Балқыбекова Торқалы Жетпісбайқызы",
+"Бастрон Юлия Александровна",
+"Бегимбаева Багдаш Тлеулесовна",
+"Бейсенбаева Жанна Манаповна",
+"Бейсенбина Гульжан Каирберлиевна",
+"Берікбай Ақерке",
+"Бидайбаева Айжан Абдулхамитқызы",
+"Бузауова Айгуль Аманжоловна",
+"Вишневская Людмила Антоновна",
+"Головачева Анна Александровна",
+"Джайчиева Дархан Майкутовна",
+"Джанбаева Гульмира Куанышбаевна",
+"Донцова Татьяна Адольфовна",
+"Дүйсекей Руслан Темірханұлы",
+"Егемберді Диана Талғатқызы",
+"Елеубаева Карлыгаш Калимжановна",
+"Еркинов Жалғас Русланулы",
+"Ермек Рахат Исатайулы",
+"Ертаев Темирлан Ерланұлы",
+"Ёлкина Татьяна Владимировна",
+"Жагапарова Жупар Каянбековна",
+"Жайлаубаева Жанира Мұратқызы",
+"Жакипбекова Жадра Мелдехановна",
+"Жакслыкова Гульнар Женисовна",
+"Жакыпбекова Сауле Алимхановна",
+"Жаманбаев Руслан Дариянович",
+"Жанабаева Клара Мухтаровна",
+"Жапарова Аимжан Жанбырбаевна",
+"Жапелова Замзагуль Турбековна",
+"Жетубаева Айнагуль Акимбаевна",
+"Жумабаева Зауре Мухтаровна",
+"Жумбаев Дастан Алданышевич",
+"Жумбаева Лайла Мукановна"
+];
+
+function addTeacher(){
+
+    let name =
+    document.getElementById("teacherName").value.trim();
+
+    if(name === "") return;
+
+    teachers.push(name);
+
+    localStorage.setItem(
+        "teachers",
+        JSON.stringify(teachers)
+    );
+
+    renderTable();
+
+    document.getElementById("teacherName").value="";
+}
+
+function renderTable(){
+
+    let table =
+    document.getElementById("teacherTable");
+
+    table.innerHTML="";
+
+    teachers.forEach((teacher,index)=>{
+
+        table.innerHTML += `
+        <tr>
+            <td>${index + 1}</td>
+            <td>${teacher}</td>
+        </tr>
+        `;
+
+    });
+
+}
+
+renderTable();
+
+</script>
+
+</script>
+
+</body>
+</html>
